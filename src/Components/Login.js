@@ -4,6 +4,7 @@ import Styled from "styled-components";
 import * as yup from "yup";
 import { axiosWithAuth } from "../utils/axiosWithAuth";
 import { FeedContext } from "../contexts/context";
+import Axios from "axios";
 
 const LoginDiv = Styled.div`
 	display: flex;
@@ -108,6 +109,11 @@ const initialErrors = {
 };
 const initialDisabled = true;
 
+// load client and secret from the environment
+const client = process.env.REACT_APP_CLIENT;
+const secret = process.env.REACT_APP_SECRET;
+const clientSecret = `${client}:${secret}`;
+
 export default function Login() {
 	const { setUsername, getIssues } = useContext(FeedContext);
 	const [credentials, setCredentials] = useState(initialFormValues);
@@ -148,9 +154,19 @@ export default function Login() {
 	const onSubmit = (event) => {
 		event.preventDefault();
 		axiosWithAuth()
-			.post("/login", credentials)
+		.post(
+			"https://bw-comakeapp-java.herokuapp.com/login",
+			`grant_type=password&username=${credentials.username}&password=${credentials.password}`,
+			{
+				headers: {
+					// btoa is converting our client id/client secret into base64
+					Authorization: `Basic ${btoa(clientSecret)}`,
+					"Content-Type": "application/x-www-form-urlencoded",
+				},
+			}
+		)
 			.then((response) => {
-				localStorage.setItem("token", response.data.token);
+				localStorage.setItem("token", response.data.access_token);
 				push("/feed");
 				setUsername(credentials.username);
 				setCredentials(initialFormValues);
@@ -158,7 +174,8 @@ export default function Login() {
 			})
 			.catch((error) => {
 				// console.log("Error:", error.response.data);
-				alert(`Oops.. Looks like there was an error. ${error.response.data.message}`);
+				console.log("error at login", error)
+				// alert(`Oops.. Looks like there was an error. ${error.response.data.message}`);
 			});
 	};
 

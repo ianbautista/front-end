@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { axiosWithAuth } from "../utils/axiosWithAuth";
 import { FeedContext } from "../contexts/context";
@@ -152,12 +152,11 @@ export default function IssuePage(props) {
 	const { issue } = props;
 	const { getIssues } = useContext(FeedContext);
 	const history = useHistory();
-	const [upvote, setUpvote] = useState(0);
 
 	const deleteIssue = (id) => {
 		// console.log(id);
 		axiosWithAuth()
-			.delete(`/api/issues/${id}`)
+			.delete(`/issues/issue/${id}`)
 			.then(() => {
 				getIssues();
 				history.push("/feed");
@@ -171,7 +170,7 @@ export default function IssuePage(props) {
 
 	const editIssue = (event) => {
 		event.preventDefault();
-		history.push(`/editIssue/${issue.issueId}`);
+		history.push(`/editIssue/${issue.issueid}`);
 	};
 
 	return (
@@ -183,22 +182,22 @@ export default function IssuePage(props) {
 				</Link>
 			</div>
 			<div className="issueContainer">
-				<button type="button" id="delete" onClick={() => deleteIssue(issue.issueId)}>
+				<button type="button" id="delete" onClick={() => deleteIssue(issue.issueid)}>
 					<i className="far fa-trash-alt"></i>
 				</button>
 				<div className="imageContainer">
-					{issue.imageURL !== null && issue.imageURL !== "" ? (
-						<img className="issue-page-image" alt="issue pic" src={`${issue.imageURL}`} />
+					{issue.image !== null && issue.image !== "" ? (
+						<img className="issue-page-image" alt="issue pic" src={`${issue.image}`} />
 					) : (
 						<img className="issue-page-image" alt="default" src={imagedefault} />
 					)}
 				</div>
 				<h1>{issue.title} </h1>
-				<div className="category">{issue.categoryName}</div>
+				<div className="category">{issue.category.categoryname}</div>
 				{issue.username !== "" && issue.username !== null && issue.username !== undefined ? (
 					<p>Posted by: {issue.username}</p>
 				) : null}
-				<Upvote upvote={upvote} setUpvote={setUpvote} id={issue.issueId} />
+				<Upvote addUpvote={issue.upvote} id={issue.issueid} />
 				<div className="description">
 					<p className="descriptionLabel">Description</p> {issue.description}
 				</div>

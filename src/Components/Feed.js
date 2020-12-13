@@ -1,9 +1,10 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { FeedContext } from "../contexts/context";
 import Styled from "styled-components";
 import IssueCard from "./IssueCard";
 import avatar from "../Assets/avatar-default-200.png";
+import { axiosWithAuth } from "../utils/axiosWithAuth";
 
 const FeedContainer = Styled.div`
 	margin-top: 100px;
@@ -47,14 +48,26 @@ img.create-avatar {
 
 export default function Feed() {
 	const { issues, searchValue } = useContext(FeedContext);
+	const [ userInfo, setUserInfo ] = useState({})
 	// console.log("username in Feed", username);
 	// console.log("searchValue in Feed", searchValue);
+	useEffect( () => {
+		axiosWithAuth()
+		.get("/users/myinfo")
+		.then((response) => {
+			console.log("avatarimage in feed", response.data)
+			setUserInfo(response.data);
+		})},
+		[]);
 
 	return (
 		<FeedContainer>
 			<NavLink to="/create">
 				<div className="create">
-					<img className="create-avatar" src={avatar} alt="default avatar" />
+					{userInfo.avatarimage !== null && userInfo.avatarimage !== "" && userInfo.avatarimage !== undefined?  
+					(<img className="create-avatar" src={userInfo.avatarimage} alt={`${userInfo.username}`} />) :
+					(<img className="create-avatar" src={avatar} alt="default avatar" />)
+					}
 					<p>
 						Post a <span>message</span>, <span>event</span> or <span>alert</span> to your
 						neighborhood
@@ -64,17 +77,16 @@ export default function Feed() {
 			{issues &&
 				issues
 					.filter((issue) => {
-						// console.log("issue in filter", issue);
 						return (
-							issue.categoryName.toLowerCase().includes(searchValue.toLowerCase()) ||
-							// issue.username.toLowerCase().includes(searchValue.toLowerCase()) ||
+							issue.category.categoryname.toLowerCase().includes(searchValue.toLowerCase()) ||
+							issue.username.toLowerCase().includes(searchValue.toLowerCase()) ||
 							issue.title.toLowerCase().includes(searchValue.toLowerCase()) ||
 							issue.description.toLowerCase().includes(searchValue.toLowerCase())
 						);
 					})
 					.map((issue) => {
 						return (
-							<Link style={{ textDecoration: "none" }} to={`/issues/${issue.issueId}`}>
+							<Link style={{ textDecoration: "none" }} to={`/issues/${issue.issueid}`}>
 								<IssueCard issue={issue} />
 							</Link>
 						);

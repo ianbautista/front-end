@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Styled from "styled-components";
-import ls from "local-storage";
+import { axiosWithAuth } from "../utils/axiosWithAuth";
 
 const UpvoteDiv = Styled.div`
 button {
@@ -16,19 +16,31 @@ button {
 `;
 
 export default function Upvote(props) {
-	const { upvote, setUpvote, id } = props;
+	const { addUpvote, id } = props;
+	const [upvote, setUpvote] = useState(addUpvote);
+
+	const getUpvote = () => {
+		axiosWithAuth()
+			.get(`/issues/issue/${id}/upvote`)
+			.then((res) => {
+				setUpvote(res.data);
+			});
+	};
 
 	const upvotePost = (event) => {
 		event.preventDefault();
-		let newCount = 1 + upvote;
-		setUpvote(newCount);
-		ls.set(`upvote${id}`, newCount);
-	};
+		let upvoteCount = 1 + addUpvote;
+		axiosWithAuth()
+			.patch(`/issues/issue/${id}/upvote`,{"upvote": upvoteCount})
+			.then(() => {
+				getUpvote();
+			})
+		};
+		
+		useEffect(() => {
+			getUpvote();
+	}, []);
 
-	useEffect(() => {
-		let upvoteCount = ls.get(`upvote${id}`);
-		setUpvote(upvoteCount);
-	}, [id, setUpvote]);
 
 	return (
 		<UpvoteDiv>

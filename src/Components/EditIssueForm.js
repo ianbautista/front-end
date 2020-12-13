@@ -182,9 +182,9 @@ const formSchema = yup.object().shape({
 		.string()
 		.min(3, "Title must be atleast 3 character")
 		.required("A title for your issue is required"),
-	categoryId: yup.string().required("Please select category."),
 	description: yup.string().required("Description cannot be empty."),
-	imageURL: yup.string().url("Must be a valid url"),
+	image: yup.string().url("Must be a valid url"),
+	categoryid: yup.string().required("Please select category."),
 });
 
 const initialDisabled = true;
@@ -193,15 +193,15 @@ export default function EditIssueForm() {
 	const { issues, addIssues, getIssues } = useContext(FeedContext);
 	const initialFormValues = {
 		title: "",
-		categoryId: "",
 		description: "",
-		imageURL: "",
+		image: "",
+		category: {categoryid: ""},
 	};
 	const initialFormErrors = {
 		title: "",
-		categoryId: "",
 		description: "",
-		imageURL: "",
+		image: "",
+		category: {categoryid: ""},
 	};
 	const [errors, setErrors] = useState(initialFormErrors);
 	const [formValues, setFormValues] = useState(initialFormValues);
@@ -218,7 +218,7 @@ export default function EditIssueForm() {
 
 	useEffect(() => {
 		axiosWithAuth()
-			.get(`/api/issues/${id}`)
+			.get(`/issues/issue/${id}`)
 			.then((response) => {
 				// console.log("get edit response data", response);
 				setFormValues(response.data);
@@ -246,12 +246,11 @@ export default function EditIssueForm() {
 	const formSubmit = (event) => {
 		event.preventDefault();
 		axiosWithAuth()
-			.put(`/api/issues/${id}`, {
+			.put(`/issues/issue/${id}`, {
 				title: formValues.title,
-				categoryId: formValues.categoryId,
 				description: formValues.description,
-				imageURL: formValues.imageURL,
-				// username: username,
+				image: formValues.image,
+				category: {categoryid: formValues.category.categoryid},
 			})
 			.then((response) => {
 				addIssues([response.data, ...issues]);
@@ -296,28 +295,28 @@ export default function EditIssueForm() {
 				<div className="errors">
 					<div className="titleError">{errors.title}</div>
 				</div>
-				<label htmlFor="category">
-					<select onChange={inputChange} value={formValues.categoryId} name="categoryId">
+				<label htmlFor="categoryid">
+					<select onChange={inputChange} value={formValues.category.categoryid} name="categoryid">
 						<option value="" default disabled>
 							Category
 						</option>
-						<option value={1}>Yard and Lawn</option>
-						<option value={2}>Community Activities</option>
-						<option value={3}>Crime & Safety</option>
-						<option value={4}>Lost & Found</option>
-						<option value={5}>Recommendation</option>
-						<option value={6}>Flooding</option>
-						<option value={7}>General</option>
-						<option value={8}>Announcements</option>
-						<option value={9}>Pets</option>
-						<option value={10}>Road Closure & Transportation</option>
-						<option value={11}>School & Education</option>
-						<option value={12}>Holiday</option>
-						<option value={13}>Utilities</option>
+						<option value={30}>Announcements</option>
+						<option value={31}>Community Activities</option>
+						<option value={32}>Crime & Safety</option>
+						<option value={33}>Flooding</option>
+						<option value={34}>General</option>
+						<option value={35}>Holiday</option>
+						<option value={36}>Lost & Found</option>
+						<option value={37}>Pets</option>
+						<option value={38}>Recommendation</option>
+						<option value={39}>Road Closure & Transportation</option>
+						<option value={40}>School & Education</option>
+						<option value={41}>Utilities</option>
+						<option value={42}>Yard and Lawn</option>
 					</select>
 				</label>
 				<div className="errors">
-					<div className="titleError">{errors.categoryName}</div>
+					<div className="titleError">{errors.category.categoryname}</div>
 				</div>
 				<label htmlFor="description">
 					<textarea
@@ -331,24 +330,24 @@ export default function EditIssueForm() {
 				<div className="errors">
 					<div className="titleError">{errors.description}</div>
 				</div>
-				<label htmlFor="imageURL">
+				<label htmlFor="image">
 					{" "}
 					Image:&nbsp;
 					<input
 						type="text"
-						name="imageURL"
-						value={formValues.imageURL}
+						name="image"
+						value={formValues.image}
 						placeholder="Enter URL of image"
 						onChange={inputChange}
 					/>
 				</label>
 				<br />
 				<div className="errors">
-					<div className="titleError">{errors.imageURL}</div>
+					<div className="titleError">{errors.image}</div>
 				</div>
 				<br />
-				{formValues.imageURL !== null && formValues.imageURL !== "" ? (
-					<img alt={formValues.title} src={`${formValues.imageURL}`} />
+				{formValues.image !== null && formValues.image !== "" ? (
+					<img alt={formValues.title} src={`${formValues.image}`} />
 				) : null}
 				<br />
 				<button type="submit" disabled={disabled} to="/feed">

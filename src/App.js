@@ -11,7 +11,7 @@ import EditIssueForm from "./Components/EditIssueForm";
 import IssuePage from "./Components/IssuePage";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
-import PrivateRoute from "./Components/PrivateRoute";
+import PrivateRoute from "./utils/PrivateRoute";
 import BurgerMenu from "./Components/BurgerMenu";
 
 import { axiosWithAuth } from "./utils/axiosWithAuth";
@@ -25,9 +25,8 @@ export default function App() {
 
 	const getIssues = () => {
 		axiosWithAuth()
-			.get("/api/issues")
+			.get("/issues/issues")
 			.then((response) => {
-				// console.log(response);
 				addIssues(response.data);
 			});
 	};
@@ -67,9 +66,9 @@ export default function App() {
 										<PrivateRoute
 											exact
 											style={{ textDecoration: "none" }}
-											path={`/issues/${issue.issueId}`}
+											path={`/issues/${issue.issueid}`}
 										>
-											<IssuePage issue={issue} key={issue.issueId} />
+											<IssuePage issue={issue} key={issue.issueid} />
 										</PrivateRoute>
 									</>
 								);
