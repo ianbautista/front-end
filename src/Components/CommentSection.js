@@ -103,7 +103,7 @@ export default function CommentSection(props) {
 
 	const getComments = () => {
 		axiosWithAuth()
-			.get(`/api/issues/${issue.issueId}/comments`)
+			.get(`/issues/issue/${issue.issueid}/comments`)
 			.then((response) => {
 				// console.log("getComments response", response.data);
 				addComments(response.data);
@@ -117,7 +117,7 @@ export default function CommentSection(props) {
 	const submitComment = (event) => {
 		event.preventDefault();
 		axiosWithAuth()
-			.post(`/api/issues/${issue.issueId}/comments`, { comment: formValues.comment })
+			.post(`/issues/issue/${issue.issueid}/comments`, { comment: formValues.comment })
 			.then((response) => {
 				console.log("comment response", response);
 				getComments();
@@ -153,7 +153,10 @@ export default function CommentSection(props) {
 							return (
 								<>
 									<p>
-										<img src={avatar} alt="default" />
+										{comment.user.avatarimage !== null && comment.user.avatarimage !== "" && comment.user.avatarimage !== undefined ?  
+										(<img src={comment.user.avatarimage} alt={`${comment.user.username}`} />) :
+										(<img src={avatar} alt="default avatar" />)
+										}
 										&nbsp;&nbsp; <span>{comment.comment}</span>
 									</p>
 									<hr />

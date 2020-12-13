@@ -3,8 +3,8 @@ import axios from "axios";
 export const axiosWithAuth = () => {
 	return axios.create({
 		headers: {
-			authorization: window.localStorage.getItem("token"),
+			Authorization: `Bearer ${localStorage.getItem("token")}`,
 		},
-		baseURL: "https://bw-co-make-8-21.herokuapp.com",
+		baseURL: "https://bw-comakeapp-java.herokuapp.com",
 	});
 };

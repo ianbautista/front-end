@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Styled from "styled-components";
 import Upvote from "./Upvote";
 
@@ -43,20 +43,19 @@ img.issueCard-image {
 
 export default function IssueCard(props) {
 	const { issue } = props;
-	const [upvote, setUpvote] = useState(0);
 
 	return (
 		<CardContainer>
 			<div className="imageContainer">
-				{issue.imageURL !== null && issue.imageURL !== "" ? (
-					<img className="issueCard-image" alt={issue.title} src={`${issue.imageURL}`} />
+				{issue.image !== null && issue.image !== "" ? (
+					<img className="issueCard-image" alt={issue.title} src={`${issue.image}`} />
 				) : null}
 			</div>
 			<h2>{issue.title} </h2>
-			<Upvote upvote={upvote} setUpvote={setUpvote} id={issue.issueId} />
+			<Upvote addUpvote={issue.upvote} id={issue.issueid} />
 			<p className="category">
 				{" "}
-				{/*<span> Category: </span>*/} {issue.categoryName}
+				{/*<span> Category: </span>*/} {issue.category.categoryName}
 			</p>
 			{issue.username !== "" && issue.username !== null && issue.username !== undefined ? (
 				<p>
