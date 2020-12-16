@@ -10,5 +10,6 @@ button {
     color: white;
     border: unset;
     cursor: pointer;
+    margin: 3% 0;
 }
 `;
