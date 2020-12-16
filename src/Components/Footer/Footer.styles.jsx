@@ -1,9 +1,6 @@
-import React from "react";
-import logo from "../Assets/logo-white.png";
-import { NavLink } from "react-router-dom";
 import Styled from "styled-components";
 
-const FooterContainer = Styled.div`
+export const FooterContainer = Styled.div`
     background: linear-gradient(to bottom, #56ccf2, #2f80ed);
     color: white;
     padding: 1% 0;
@@ -69,30 +66,3 @@ hr {
     }
 }
 `;
-
-export default function Footer() {
-	return (
-		<FooterContainer>
-			<div className="innerDiv">
-				<NavLink to="/feed">
-					<img
-						className="logo-icon"
-						src={logo}
-						alt="Logo. Two hands in the shape of a heart."
-					/>
-				</NavLink>
-				<div className="break"></div>
-				<nav>
-					<a href="https://jovial-austin-69da22.netlify.app/index.html">Home</a>
-					<a href="https://jovial-austin-69da22.netlify.app/about.html">About</a>
-					<a href="https://jovial-austin-69da22.netlify.app/team.html">Team</a>
-				</nav>
-				<div className="break"></div>
-				<div className="text-container">
-					<p>Built by your Co-Makers at Lambda School © Co-Make 2020</p>
-					<p>Build Week</p>
-				</div>
-			</div>
-		</FooterContainer>
-	);
-}
