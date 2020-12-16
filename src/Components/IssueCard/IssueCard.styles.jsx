@@ -7,6 +7,14 @@ export const CardContainer = Styled.div`
 	padding: 3%;
 	margin: 1% auto;
 	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+	h2 {
+		margin: 1% 0;
+		padding: 0;
+	}
+	.posted-by {
+		margin: 0;
+		padding: 0;
+	}
 	@media (max-width: 450px) {
 		width: 95vw;
     }
@@ -17,7 +25,7 @@ export const CardContainer = Styled.div`
 	margin: 3%;
 	@media (max-width: 450px) {
 		width: 89vw;
-		margin: 0;
+		margin: 1% 0;
 		padding: 0;
     }
 }
@@ -37,5 +45,7 @@ img.issueCard-image {
 .category {
 	color: gray;
 	font-style: italic;
+	margin-top: 1%;
+	padding: 0;
 }
 `;

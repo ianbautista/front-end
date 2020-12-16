@@ -12,6 +12,13 @@ export default function IssueCard(props) {
 	return (
 		<CardContainer>
 			<h2>{issue.title} </h2>
+			{issue.user.username !== "" &&
+			issue.user.username !== null &&
+			issue.user.username !== undefined ? (
+				<p className="posted-by">
+					<span> Posted by: </span> {issue.user.username}
+				</p>
+			) : null}
 			<p className="category"> {issue.category.categoryname}</p>
 			{issue.image !== null && issue.image !== "" ? (
 				<div className="imageContainer">
@@ -23,13 +30,6 @@ export default function IssueCard(props) {
 				</div>
 			) : null}
 			<Upvote currentUpvote={issue.upvote} id={issue.issueid} />
-			{issue.user.username !== "" &&
-			issue.user.username !== null &&
-			issue.user.username !== undefined ? (
-				<p>
-					<span> Posted by: </span> {issue.user.username}
-				</p>
-			) : null}
 			<p>
 				<span> Description: </span> {issue.description}
 			</p>
